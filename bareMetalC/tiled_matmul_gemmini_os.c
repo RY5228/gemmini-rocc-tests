@@ -32,6 +32,8 @@ typedef elem_t ACC_T;
 #define MAT_DIM_J 64
 #endif
 
+#define REPEAT 100
+
 void print_tile(elem_t* in, int tile_dim) {
   for (size_t r = 0; r < tile_dim; r++) {
     printf("row starts at: %p\n", in +r*MAT_DIM_J);
@@ -149,18 +151,19 @@ int main() {
     full_matshift(gold_full, gold, 0);
 #endif
 
-    printf("Starting gemmini matmul\n");
+    printf("Starting gemmini matmul, %u iterations\n", REPEAT);
     unsigned long start = read_cycles();
 
-    tiled_matmul_auto(MAT_DIM_I, MAT_DIM_J, MAT_DIM_K,
-            (elem_t*)full_A, (elem_t*)full_B, NO_BIAS ? NULL : &full_D[0][0], (elem_t*)full_C,
-            MAT_DIM_K, MAT_DIM_J, MAT_DIM_J, MAT_DIM_J,
-            MVIN_SCALE_IDENTITY, MVIN_SCALE_IDENTITY, MVIN_SCALE_IDENTITY,
-            NO_ACTIVATION, ACC_SCALE_IDENTITY, 0, false,
-            false, false,
-            false, false,
-            0,
-            OS);
+    for (size_t i = 0; i < REPEAT; ++i)
+      tiled_matmul_auto(MAT_DIM_I, MAT_DIM_J, MAT_DIM_K,
+              (elem_t*)full_A, (elem_t*)full_B, NO_BIAS ? NULL : &full_D[0][0], (elem_t*)full_C,
+              MAT_DIM_K, MAT_DIM_J, MAT_DIM_J, MAT_DIM_J,
+              MVIN_SCALE_IDENTITY, MVIN_SCALE_IDENTITY, MVIN_SCALE_IDENTITY,
+              NO_ACTIVATION, ACC_SCALE_IDENTITY, 0, false,
+              false, false,
+              false, false,
+              0,
+              OS);
 
     unsigned long end = read_cycles();
     printf("Cycles taken: %u\n", end-start);
