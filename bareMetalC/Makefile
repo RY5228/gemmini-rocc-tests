@@ -47,6 +47,8 @@ tests = \
 	tiled_matmul_ws_perf \
 	tiled_matmul_cpu \
 	tiled_matmul_option \
+	tiled_matmul_gemmini_os \
+	tiled_matmul_gemmini_ws \
 	transpose \
 	matrix_add \
 	resadd \
