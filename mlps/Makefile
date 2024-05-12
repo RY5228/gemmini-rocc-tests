@@ -6,6 +6,7 @@ tests = \
 	mlp2 \
 	mlp3 \
 	mlp4 \
+	mlp9 \
 	mlp1_32 \
 	mlp2_32 \
 	mlp3_32 \
